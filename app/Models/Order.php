@@ -10,7 +10,7 @@ class Order extends Model
 {
     use LogsActivity;
 
-    protected $fillable = ['estimate_id', 'supplier_id', 'number', 'date', 'status', 'total_amount', 'notes'];
+    protected $fillable = ['estimate_id', 'supplier_id', 'number', 'date', 'status', 'total_amount', 'notes', 'attachments'];
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -21,6 +21,7 @@ class Order extends Model
 
     protected $casts = [
         'date' => 'date',
+        'attachments' => 'array',
     ];
 
     public function supplier(): \Illuminate\Database\Eloquent\Relations\BelongsTo

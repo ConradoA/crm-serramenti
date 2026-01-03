@@ -29,6 +29,9 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->brandName('CRM Aziendale')
             ->databaseNotifications()
+            ->plugins([
+                \Saade\FilamentFullCalendar\FilamentFullCalendarPlugin::make()
+            ])
             ->colors([
                 'primary' => Color::Amber,
             ])

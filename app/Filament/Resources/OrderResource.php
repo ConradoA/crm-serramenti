@@ -57,6 +57,13 @@ class OrderResource extends Resource
                     ->numeric()
                     ->default(0),
                 Forms\Components\Textarea::make('notes')->columnSpanFull(),
+                Forms\Components\FileUpload::make('attachments')
+                    ->label('Allegati (Disegni, Foto)')
+                    ->multiple()
+                    ->directory('order-attachments')
+                    ->columnSpanFull()
+                    ->acceptedFileTypes(['application/pdf', 'image/*'])
+                    ->maxFiles(5),
                 Forms\Components\Section::make('Articoli Ordine')
                     ->schema([
                         Forms\Components\Repeater::make('items')
@@ -120,6 +127,14 @@ class OrderResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('pdf')
+                    ->label('PDF')
+                    ->icon('heroicon-o-document-arrow-down')
+                    ->action(function (Order $record) {
+                        $company = \App\Models\Company::first();
+                        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.order', ['order' => $record, 'company' => $company]);
+                        return response()->streamDownload(fn() => print ($pdf->output()), "Ordine_{$record->number}.pdf");
+                    }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

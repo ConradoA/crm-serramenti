@@ -23,5 +23,13 @@ class Client extends Model
     {
         return $this->hasMany(Estimate::class);
     }
-    //
+    public function workOrders(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(WorkOrder::class);
+    }
+
+    public function invoices(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Invoice::class);
+    }
 }

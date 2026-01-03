@@ -13,8 +13,8 @@ class StatsOverview extends BaseWidget
     protected function getStats(): array
     {
         return [
-            Stat::make('Preventivi Approvati (Mese)', Estimate::where('status', 'approved')->whereMonth('created_at', now()->month)->count())
-                ->description('Preventivi confermati questo mese')
+            Stat::make('Preventivi Approvati (30 gg)', Estimate::where('status', 'approved')->where('created_at', '>=', now()->subDays(30))->count())
+                ->description('Preventivi confermati negli ultimi 30 giorni')
                 ->descriptionIcon('heroicon-m-check-badge')
                 ->color('success'),
 

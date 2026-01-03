@@ -54,6 +54,26 @@ class ClientResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->before(function ($record, $action) {
+                        if ($record->estimates()->exists()) {
+                            \Filament\Notifications\Notification::make()
+                                ->danger()
+                                ->title('Impossibile eliminare')
+                                ->body('Il cliente ha preventivi associati. Elimina prima i preventivi.')
+                                ->send();
+                            $action->cancel();
+                        }
+                        // Check for work orders (assuming relationship exists)
+                        if (method_exists($record, 'workOrders') && $record->workOrders()->exists()) {
+                            \Filament\Notifications\Notification::make()
+                                ->danger()
+                                ->title('Impossibile eliminare')
+                                ->body('Il cliente ha commesse associate. Elimina prima le commesse.')
+                                ->send();
+                            $action->cancel();
+                        }
+                    }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
