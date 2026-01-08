@@ -29,12 +29,6 @@ class AppServiceProvider extends ServiceProvider
 
         if (app()->environment('production')) {
             \Illuminate\Support\Facades\URL::forceScheme('https');
-
-            // Forzar a Livewire a usar la ruta raíz para actualizaciones
-            \Livewire\Livewire::setUpdateRoute(function ($handle) {
-                return \Illuminate\Support\Facades\Route::post('/livewire/update', $handle)
-                    ->middleware(['web']);
-            });
         }
     }
 }
